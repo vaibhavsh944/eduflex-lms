@@ -1,7 +1,11 @@
 -- Fix log_audit_action() to use JSONB access for record fields
 -- This prevents errors when trigger is used on tables without title/full_name/name columns
+-- Also fixes jsonb_each alias conflict in UPDATE branch and actor_id fallback for system-triggered events
+
+ALTER TABLE audit_logs ALTER COLUMN actor_id DROP NOT NULL;
+
 CREATE OR REPLACE FUNCTION log_audit_action()
-RETURNS TRIGGER LANGUAGE plpgsql SECURITY DEFINER AS \$\$
+RETURNS TRIGGER LANGUAGE plpgsql SECURITY DEFINER AS $$
 DECLARE
   v_action TEXT;
   v_action_type TEXT;
@@ -12,7 +16,11 @@ DECLARE
   v_actor_email TEXT;
   v_details JSONB;
 BEGIN
-  v_actor_id := COALESCE(auth.uid(), NEW.id, OLD.id);
+  v_actor_id := COALESCE(
+    auth.uid(),
+    (to_jsonb(NEW) ->> 'user_id')::UUID,
+    (to_jsonb(OLD) ->> 'user_id')::UUID
+  );
   v_actor_email := (SELECT email FROM auth.users WHERE id = v_actor_id);
 
   IF TG_OP = 'INSERT' THEN
@@ -37,10 +45,10 @@ BEGIN
       NEW.id::TEXT
     );
     v_details := jsonb_build_object('changes', (
-      SELECT jsonb_object_agg(key, jsonb_build_object('old', OLD.value, 'new', NEW.value))
-      FROM jsonb_each(to_jsonb(OLD) - 'updated_at' - 'created_at')
-      JOIN jsonb_each(to_jsonb(NEW) - 'updated_at' - 'created_at') USING (key)
-      WHERE OLD.value IS DISTINCT FROM NEW.value
+      SELECT jsonb_object_agg(key, jsonb_build_object('old', old_je.value, 'new', new_je.value))
+      FROM jsonb_each(to_jsonb(OLD) - 'updated_at' - 'created_at') AS old_je(key, value)
+      JOIN jsonb_each(to_jsonb(NEW) - 'updated_at' - 'created_at') AS new_je(key, value) USING (key)
+      WHERE old_je.value IS DISTINCT FROM new_je.value
     ));
   ELSIF TG_OP = 'DELETE' THEN
     v_action := TG_TABLE_NAME || ' deleted';
@@ -62,4 +70,4 @@ BEGIN
 
   RETURN COALESCE(NEW, OLD);
 END;
-\$\$;
+$$;
