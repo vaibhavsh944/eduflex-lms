@@ -67,3 +67,4 @@ push-*.js
 setup-*.js
 generate_*.py
 *.sql
+!supabase/migrations/*.sql
