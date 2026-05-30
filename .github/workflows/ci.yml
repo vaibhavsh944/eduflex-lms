@@ -1,0 +1,23 @@
+name: CI — TypeCheck & Lint & Build
+on: [push, pull_request]
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - name: TypeCheck (shared)
+        working-directory: ./shared
+        run: npx tsc --noEmit
+      - name: TypeCheck (web)
+        working-directory: ./web
+        run: npx tsc --noEmit
+      - name: Lint (web)
+        working-directory: ./web
+        run: npx eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0
+      - name: Build (web)
+        working-directory: ./web
+        run: npx vite build

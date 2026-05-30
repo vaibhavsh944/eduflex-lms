@@ -1,0 +1,69 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build outputs
+dist/
+build/
+.expo/
+.next/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing
+coverage/
+playwright-report/
+test-results/
+
+# Vercel
+.vercel/
+
+# Turborepo
+.turbo/
+
+# Credential/Data files
+*_signup*.json
+login_*.json
+*_data.json
+
+# Logs
+vite*.log
+*.log
+
+# Agent/Skill configs
+.agents/
+.claude/
+
+# Scripts
+scripts/
+
+# Supabase push debug
+supabase_push*.txt
+
+# Misc
+*.pptx
+*.docx
+debug_*.js
+fix_*.js
+verify*.js
+push-*.js
+*_test.js
+setup-*.js
+generate_*.py
+*.sql

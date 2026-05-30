@@ -1,0 +1,24 @@
+name: Lighthouse CI
+on: [push, pull_request]
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci
+      - name: Build web app
+        working-directory: ./web
+        run: npx vite build
+      - uses: treosh/lighthouse-ci-action@v10
+        with:
+          urls: |
+            http://localhost:4173/
+            http://localhost:4173/catalog
+          budgetPath: ./lighthouse-budget.json
+          uploadArtifacts: true
+          serverStartCommand: cd web && npx vite preview --port 4173 --host 0.0.0.0
+          serverStartTimeout: 30000
+        env:
+          CI: true
+      - name: Run axe-core CLI audit
+        run: npx @axe-core/cli http://localhost:4173/ --exit

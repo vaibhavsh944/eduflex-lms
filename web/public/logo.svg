@@ -1,0 +1,13 @@
+<svg width="140" height="32" viewBox="0 0 140 32" xmlns="http://www.w3.org/2000/svg">
+  <!-- Book icon mark -->
+  <rect x="0" y="4" width="22" height="24" rx="3" fill="#6366F1"/>
+  <rect x="4" y="8" width="14" height="2" rx="1" fill="white" opacity="0.9"/>
+  <rect x="4" y="12" width="14" height="2" rx="1" fill="white" opacity="0.7"/>
+  <rect x="4" y="16" width="10" height="2" rx="1" fill="white" opacity="0.5"/>
+  <rect x="11" y="0" width="2" height="8" rx="1" fill="#4F46E5"/>
+  <!-- Wordmark -->
+  <text x="30" y="22" font-family="Sora, sans-serif" font-weight="700"
+        font-size="18" fill="#0F172A" letter-spacing="-0.3">
+    EduFlow
+  </text>
+</svg>

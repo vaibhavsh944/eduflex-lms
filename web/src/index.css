@@ -1,0 +1,177 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background:       0 0% 100%;
+    --foreground:       224 71% 4%;
+    --card:             0 0% 100%;
+    --card-foreground:  224 71% 4%;
+    --popover:          0 0% 100%;
+    --popover-foreground: 224 71% 4%;
+    --primary:          262 83% 58%;
+    --primary-foreground: 210 40% 98%;
+    --secondary:        220 14% 96%;
+    --secondary-foreground: 220 9% 46%;
+    --muted:            220 14% 96%;
+    --muted-foreground: 220 9% 46%;
+    --accent:           220 14% 96%;
+    --accent-foreground: 220 9% 15%;
+    --destructive:      0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+    --border:           220 13% 91%;
+    --input:            220 13% 91%;
+    --ring:             262 83% 58%;
+    --color-success:    142 71% 45%;
+    --color-warning:    38 92% 50%;
+    --color-error:      0 84% 60%;
+    --color-info:       199 89% 48%;
+    --radius:           0.625rem;
+    --sidebar-width:          256px;
+    --sidebar-collapsed-width: 64px;
+    --topbar-height:           60px;
+    --z-sidebar:    100;
+    --z-topbar:     110;
+    --z-dropdown:   200;
+    --z-modal:      300;
+    --z-toast:      400;
+    --z-tooltip:    500;
+  }
+
+  .dark {
+    --background:       222 47% 11%;
+    --foreground:       213 31% 91%;
+    --card:             222 47% 14%;
+    --card-foreground:  213 31% 91%;
+    --popover:          222 47% 14%;
+    --popover-foreground: 213 31% 91%;
+    --primary:          263 70% 68%;
+    --primary-foreground: 222 47% 11%;
+    --secondary:        223 47% 17%;
+    --secondary-foreground: 215 20% 65%;
+    --muted:            223 47% 17%;
+    --muted-foreground: 215 20% 65%;
+    --accent:           223 47% 20%;
+    --accent-foreground: 213 31% 91%;
+    --destructive:      0 63% 50%;
+    --destructive-foreground: 210 40% 98%;
+    --border:           216 34% 22%;
+    --input:            216 34% 22%;
+    --ring:             263 70% 68%;
+    --color-success:    142 71% 35%;
+    --color-warning:    38 92% 40%;
+    --color-error:      0 74% 55%;
+    --color-info:       199 89% 38%;
+  }
+
+  [data-colorblind="deuteranopia"] {
+    --color-success:    199 89% 48%;
+    --color-error:      38 92% 50%;
+  }
+
+  [data-colorblind="protanopia"] {
+    --color-success:    199 89% 48%;
+    --color-error:      38 92% 50%;
+  }
+
+  [data-colorblind="achromatopsia"] {
+    --primary:          0 0% 20%;
+    --color-success:    0 0% 40%;
+    --color-error:      0 0% 20%;
+    --color-warning:    0 0% 60%;
+    --color-info:       0 0% 50%;
+  }
+
+  @media (prefers-contrast: more) {
+    :root {
+      --border:           220 13% 50%;
+      --muted-foreground: 220 9% 20%;
+    }
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  *:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+    border-radius: calc(var(--radius) - 2px);
+  }
+
+  *:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  ::selection {
+    background: hsl(var(--primary) / 0.2);
+    color: hsl(var(--foreground));
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  .sr-only.focus\:not-sr-only:focus {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: inherit;
+    margin: inherit;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+  }
+
+  .skeleton {
+    @apply animate-skeleton bg-muted rounded-md;
+    background: linear-gradient(
+      90deg,
+      hsl(var(--muted)) 25%,
+      hsl(var(--muted) / 0.7) 50%,
+      hsl(var(--muted)) 75%
+    );
+    background-size: 200px 100%;
+  }
+
+  .prose-eduflow {
+    @apply prose prose-sm max-w-none
+           prose-headings:font-display
+           prose-headings:text-foreground
+           prose-p:text-foreground/90
+           prose-a:text-primary prose-a:no-underline hover:prose-a:underline
+           prose-code:bg-muted prose-code:rounded prose-code:px-1
+           prose-blockquote:border-l-primary;
+  }
+}
